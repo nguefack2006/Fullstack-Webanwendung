@@ -9,17 +9,15 @@ const Produkt = sequelize.define('produkt', {
         allowNull: false
     },
 
-    produktReferenz: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-
     produktName: {
         type: DataTypes.STRING,
         allowNull: false
     },
-
-    lagerbestand: {
+    produktBeschreibung: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+    produktMenge: {
         type: DataTypes.DECIMAL(12, 3),
         allowNull: false,
         defaultValue: 0,
