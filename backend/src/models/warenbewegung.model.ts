@@ -43,14 +43,14 @@ const Warenbewegung = sequelize.define('warenbewegung', {
         }
     },
 
-    zeitpunkt: {
+    bewegungsDatum: {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW
     },
 
-    grund: {
-        type: DataTypes.STRING,
+    bemerkung: {
+        type: DataTypes.TEXT,
         allowNull: true
     }
 }, {

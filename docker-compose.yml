@@ -1,4 +1,23 @@
 services:
+  backend:
+    build: ./backend
+    restart: unless-stopped
+
+    depends_on:
+      database:
+        condition: service_healthy
+
+    env_file:
+      - ./backend/.env
+
+    ports:
+      - "8080:3000"
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "4200:4200"
+
   database:
     image: postgres:18
     restart: unless-stopped
