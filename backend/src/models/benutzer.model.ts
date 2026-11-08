@@ -17,7 +17,8 @@ const Benutzer = sequelize.define('benutzer', {
     },
     benutzerEmail:{
         type: DataTypes.STRING,
-        allowNull:false
+        allowNull:false,
+        unique:true
     },
     benutzerGeburtsdatum:{
         type: DataTypes.DATE,
@@ -26,6 +27,47 @@ const Benutzer = sequelize.define('benutzer', {
     benutzerRolle:{
         type: DataTypes.ENUM('LAGERVERWALTER', 'LAGERASSISTENT'),
         allowNull:false
+    },
+    benutzerPasswortHash: {
+    type: DataTypes.STRING,
+    allowNull: false,
     }
 })
+
+export function createBenutzer(daten: {
+    benutzerId: number;
+    benutzerVorname: string;
+    benutzerNachname: string;
+    benutzerEmail: string;
+    benutzerPasswortHash: string;
+    benutzerRolle: 'LAGERVERWALTER' | 'LAGERASSISTENT';
+    benutzerGeburtsdatum?: Date;
+}) {
+    return Benutzer.create({
+        benutzerId: daten.benutzerId,
+        benutzerVorname: daten.benutzerVorname,
+        benutzerNachname: daten.benutzerNachname,
+        benutzerEmail: daten.benutzerEmail,
+        benutzerPasswortHash: daten.benutzerPasswortHash,
+        benutzerRolle: daten.benutzerRolle,
+        benutzerGeburtsdatum: daten.benutzerGeburtsdatum
+    });
+}
+export function getBenutzerByEmail(benutzerEmail: string) {
+    return Benutzer.findOne({
+        where: { benutzerEmail }
+    });
+}
+
+export function getBenutzerById(benutzerId: number) {
+    return Benutzer.findByPk(benutzerId, {
+        attributes: [
+            'benutzerId',
+            'benutzerVorname',
+            'benutzerNachname',
+            'benutzerEmail',
+            'benutzerRolle'
+        ]
+    });
+}
 export { Benutzer };
