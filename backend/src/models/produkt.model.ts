@@ -64,3 +64,37 @@ export function searchByName(name: string) {
     });
 }
 
+export function createProdukt(produkt: {
+    produktId: number;
+    produktName: string;
+    produktBeschreibung: string;
+    erstelltVon: number;
+}) {
+    return Produkt.create({
+        produktId: produkt.produktId,
+        produktName: produkt.produktName,
+        produktBeschreibung: produkt.produktBeschreibung,
+        erstelltVon: produkt.erstelltVon
+    });
+}
+
+export function updateProdukt(
+    produktId: number,
+    daten: {
+        produktName?: string;
+        produktBeschreibung?: string;
+    }
+) {
+    return Produkt.update(daten, {
+        where: { produktId },
+        fields: ['produktName', 'produktBeschreibung']
+    });
+}
+
+export function deleteProdukt(produktId: number) {
+    return Produkt.destroy({
+        where: { produktId }
+    });
+}
+
+export { Produkt };

@@ -5,6 +5,10 @@ import produktRoutes from './routes/produkt.route';
 import stockRoutes from './routes/stock.route';
 import warenbewegungRoutes from './routes/warenbewegung.route';
 import statistikRoutes from './routes/statistik.route';
+import benutzerRoutes from './routes/benutzer.routes';
+import produktRoutes from './routes/produkt.routes';
+import { sessionMiddleware } from './config/session';
+import { loadBenutzer } from './middlewares/authentifizierung';
 const app = express(); 
 app.use(
   '/api-docs',
@@ -15,6 +19,13 @@ app.use(express.json());
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello World!');
+app.use(sessionMiddleware);
+app.use(loadBenutzer);
+
+app.use('/api', benutzerRoutes);
+app.use('/api/products', produktRoutes);
+app.get('/', (req: Request, res: Response)=> {res.send ('Hello Wold !');
+    
 });
 
 app.use('/api/products', produktRoutes);

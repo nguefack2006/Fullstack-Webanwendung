@@ -1,10 +1,16 @@
 import app from './app';
 import { sequelize } from './config/postgres';
 import "./models/produkt.model";
+import { sessionStore } from './config/session';
+import { Benutzer } from './models/benutzer.model';
+import { Produkt } from './models/produkt.model';
 
 async function startServer(): Promise<void> {
   try {
     await sequelize.authenticate();
+    await Benutzer.sync();
+    await Produkt.sync();
+    await sessionStore.sync();
     console.log('Verbindung zu PostgreSQL erfolgreich');
 
     const port = Number(process.env.PORT);
