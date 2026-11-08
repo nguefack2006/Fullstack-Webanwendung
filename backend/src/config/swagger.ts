@@ -1,3 +1,6 @@
+import swaggerDocument from "../../swagger-output.json";
+
+export { swaggerDocument };
 export const swaggerDocument = {
   "openapi": "3.0.3",
   "info": {
