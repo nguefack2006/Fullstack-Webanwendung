@@ -1,5 +1,7 @@
 import { alleProdukte, produktById, searchProdukteByName } from "../services/produkt.service";
 import { Request, Response } from 'express';
+import { UniqueConstraintError } from 'sequelize';
+import { createProdukt , updateProdukt ,  deleteProdukt } from '../models/produkt.model';
 
 export async function getAllProdukte(req: Request, res: Response) {
     try {
@@ -45,10 +47,6 @@ export async function suchProdukteByName(req: Request, res: Response) {
     }
 }
 
-
-import type { Request, Response } from 'express';
-import { UniqueConstraintError } from 'sequelize';
-import { createProdukt , updateProdukt ,  deleteProdukt } from '../models/produkt.model';
 
 export async function handleCreateProdukt(req: Request, res: Response): Promise<void> {
     const benutzer = res.locals.benutzer;

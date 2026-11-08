@@ -97,4 +97,3 @@ export function deleteProdukt(produktId: number) {
     });
 }
 
-export { Produkt };
