@@ -1,5 +1,6 @@
 import app from './app';
 import { sequelize } from './config/postgres';
+import "./models/produkt.model";
 
 async function startServer(): Promise<void> {
   try {
@@ -16,6 +17,7 @@ async function startServer(): Promise<void> {
     await sequelize.close();
     process.exitCode = 1;
   }
+  await sequelize.sync();
 }
 
 void startServer();

@@ -7,7 +7,8 @@ const Warenbewegung = sequelize.define('warenbewegung', {
     bewegungId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
+        autoIncrement: true
     },
 
     produktId: {
@@ -59,3 +60,11 @@ const Warenbewegung = sequelize.define('warenbewegung', {
 });
 
 export { Warenbewegung };
+export async function getBewegungen(produktId: number) {
+    return Warenbewegung.findAll({
+        where: {
+            produktId: produktId
+        }
+    });
+}
+
