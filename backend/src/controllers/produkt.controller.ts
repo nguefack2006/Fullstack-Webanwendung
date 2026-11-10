@@ -37,7 +37,7 @@ export async function suchProdukteByName(req: Request, res: Response) {
         const name = req.query.name as string;
         const produkte = await searchProdukteByName(name);
         if (!produkte || produkte.length === 0) {
-            res.status(400).json({ error: 'Ungültiger Suchbegriff' });
+            res.status(404).json({ error: 'Ungültiger Suchbegriff' });
             return;
         }
         res.status(200).json(produkte);
