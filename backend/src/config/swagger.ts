@@ -23,6 +23,9 @@ export const swaggerDocument = {
     },
     {
       "name": "System"
+    },
+    {
+      "name": "Lagerbewegungen"
     }
   ],
   "components": {
@@ -257,6 +260,39 @@ export const swaggerDocument = {
             "type": "integer",
             "minimum": 1,
             "maximum": 2147483647
+          }
+        }
+      },
+      "Warenbewegung": {
+        "type": "object",
+        "properties": {
+          "bewegungId": {
+            "type": "integer"
+          },
+          "produktId": {
+            "type": "integer"
+          },
+          "benutzerId": {
+            "type": "integer"
+          },
+          "bewegungTyp": {
+            "type": "string",
+            "enum": [
+              "EINGANG",
+              "AUSGANG"
+            ]
+          },
+          "menge": {
+            "type": "string",
+            "example": "3.000"
+          },
+          "bewegungsDatum": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "bemerkung": {
+            "type": "string",
+            "nullable": true
           }
         }
       }
@@ -610,6 +646,42 @@ export const swaggerDocument = {
           }
         },
         "description": "Bestand beginnt bei 0. erstelltVon wird aus dem angemeldeten Benutzer übernommen. Produkt-ID manuell angeben."
+      },
+      "get": {
+        "tags": [
+          "Produkte"
+        ],
+        "summary": "Alle Produkte anzeigen",
+        "responses": {
+          "200": {
+            "description": "Erfolgreich abgerufen",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "": "#/components/schemas/Produkt"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Serverfehler",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/products/{id}": {
@@ -765,6 +837,422 @@ export const swaggerDocument = {
           }
         },
         "description": "Löscht tatsächlich Daten. Ausschließlich ein eigens angelegtes Testprodukt verwenden. Der aktuelle Controller enthält keine zusätzliche Prüfung auf MongoDB-Bewegungen."
+      },
+      "get": {
+        "tags": [
+          "Produkte"
+        ],
+        "summary": "Ein Produkt anzeigen",
+        "responses": {
+          "200": {
+            "description": "Erfolgreich abgerufen",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "": "#/components/schemas/Produkt"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Serverfehler",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Produkt nicht gefunden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/products/search": {
+      "get": {
+        "tags": [
+          "Produkte"
+        ],
+        "summary": "Produkte nach Namen suchen",
+        "responses": {
+          "200": {
+            "description": "Erfolgreich abgerufen",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "": "#/components/schemas/Produkt"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Serverfehler",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Kein Treffer oder ungültiger Suchbegriff",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Karton"
+          }
+        ]
+      }
+    },
+    "/api/products/{id}/movements": {
+      "get": {
+        "tags": [
+          "Produkte"
+        ],
+        "summary": "Bewegungen eines Produkts anzeigen",
+        "responses": {
+          "200": {
+            "description": "Erfolgreich abgerufen",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "": "#/components/schemas/Warenbewegung"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Serverfehler",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ]
+      }
+    },
+    "/api/products/{id}/outgoing": {
+      "get": {
+        "tags": [
+          "Produkte"
+        ],
+        "summary": "Ausgangsmengen pro Tag anzeigen",
+        "responses": {
+          "200": {
+            "description": "Erfolgreich abgerufen",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "datum": {
+                        "type": "string",
+                        "format": "date"
+                      },
+                      "menge": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Serverfehler",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Ungültige Produkt-ID oder Gruppierung",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "groupBy",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "day"
+              ]
+            },
+            "example": "day"
+          }
+        ]
+      }
+    },
+    "/api/stock/wareneingang": {
+      "post": {
+        "summary": "Wareneingang buchen",
+        "tags": [
+          "Lagerbewegungen"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "produktId",
+                  "benutzerId",
+                  "menge"
+                ],
+                "properties": {
+                  "produktId": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "benutzerId": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "menge": {
+                    "type": "number",
+                    "minimum": 0,
+                    "exclusiveMinimum": true
+                  }
+                }
+              },
+              "example": {
+                "produktId": 1,
+                "benutzerId": 1,
+                "menge": 3
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Bewegung erfasst",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "": "#/components/schemas/Warenbewegung"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Buchung fehlgeschlagen",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Serverfehler",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/stock/warenausgang": {
+      "post": {
+        "summary": "Warenausgang buchen",
+        "tags": [
+          "Lagerbewegungen"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "produktId",
+                  "benutzerId",
+                  "menge"
+                ],
+                "properties": {
+                  "produktId": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "benutzerId": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "menge": {
+                    "type": "number",
+                    "minimum": 0,
+                    "exclusiveMinimum": true
+                  }
+                }
+              },
+              "example": {
+                "produktId": 1,
+                "benutzerId": 1,
+                "menge": 3
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Bewegung erfasst",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "": "#/components/schemas/Warenbewegung"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Buchung fehlgeschlagen",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Serverfehler",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

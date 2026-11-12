@@ -1,4 +1,4 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, Op } from 'sequelize';
 import { sequelize } from '../config/postgres';
 import { Benutzer } from './benutzer.model';
 
@@ -39,6 +39,24 @@ const Produkt = sequelize.define('produkt', {
     tableName: 'produkt',
     timestamps: false
 });
+
+export function getAll() {
+    return Produkt.findAll();
+}
+
+export function getById(produktId: number) {
+    return Produkt.findByPk(produktId);
+}
+
+export function searchByName(name: string) {
+    return Produkt.findAll({
+        where: {
+            produktName: {
+                [Op.iLike]: `%${name}%`
+            }
+        }
+    });
+}
 
 export function createProdukt(produkt: {
     produktId: number;
