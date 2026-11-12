@@ -299,6 +299,31 @@ export const swaggerDocument = {
     }
   },
   "paths": {
+    "/api/ready": {
+      "get": {
+        "tags": ["System"],
+        "summary": "Bereitschaft des Backends prüfen",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "PostgreSQL ist erreichbar",
+            "content": {
+              "application/json": {
+                "example": { "status": "ready" }
+              }
+            }
+          },
+          "503": {
+            "description": "PostgreSQL ist nicht erreichbar",
+            "content": {
+              "application/json": {
+                "example": { "status": "not_ready" }
+              }
+            }
+          }
+        }
+      }
+    },
     "/": {
       "get": {
         "summary": "Backend prüfen",
@@ -1256,4 +1281,5 @@ export const swaggerDocument = {
       }
     }
   }
+
 };
