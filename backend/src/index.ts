@@ -1,5 +1,6 @@
 import app from './app';
 import { sequelize } from './config/postgres';
+import "./models/produkt.model";
 import { sessionStore } from './config/session';
 import { Benutzer } from './models/benutzer.model';
 import { Produkt } from './models/produkt.model';
@@ -24,6 +25,7 @@ async function startServer(): Promise<void> {
     await sequelize.close();
     process.exitCode = 1;
   }
+  await sequelize.sync();
 }
 
 void startServer();
