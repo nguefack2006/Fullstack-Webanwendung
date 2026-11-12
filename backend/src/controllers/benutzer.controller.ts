@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcrypt';
-import {getBenutzerByEmail, createBenutzer} from '../models/benutzer.model';
+import { getBenutzerByEmail } from '../models/benutzer.model';
+import { erstelleBenutzerKonto } from '../services/benutzer.service';
 import { UniqueConstraintError } from 'sequelize';
 
 export async function handleLogin(
@@ -169,24 +170,20 @@ export async function handleRegisterLagerverwalter(
     }
 
     try {
-        const benutzerPasswortHash = await bcrypt.hash(
-            benutzerPasswort,
-            12
-        );
 
-        const benutzer = await createBenutzer({
+        const neueBenutzerId = await erstelleBenutzerKonto({
             benutzerId,
-            benutzerVorname: benutzerVorname.trim(),
-            benutzerNachname: benutzerNachname.trim(),
-            benutzerEmail: benutzerEmail.trim(),
-            benutzerPasswortHash,
-            benutzerRolle: 'LAGERVERWALTER'
-        });
+            benutzerVorname,
+            benutzerNachname,
+            benutzerEmail,
+            benutzerPasswort
+        }, 'LAGERVERWALTER');
 
         res.status(201).json({
             message: 'Konto erfolgreich erstellt.',
-            benutzerId: benutzer.get('benutzerId')
+            benutzerId: neueBenutzerId
         });
+        
     } catch (error) {
         if (error instanceof UniqueConstraintError) {
             res.status(409).json({
@@ -270,23 +267,17 @@ export async function handleCreateLagerassistent(
     }
 
     try {
-        const benutzerPasswortHash = await bcrypt.hash(
-            benutzerPasswort,
-            12
-        );
-
-        const assistent = await createBenutzer({
+        const neueBenutzerId = await erstelleBenutzerKonto({
             benutzerId,
-            benutzerVorname: benutzerVorname.trim(),
-            benutzerNachname: benutzerNachname.trim(),
-            benutzerEmail: benutzerEmail.trim(),
-            benutzerPasswortHash,
-            benutzerRolle: 'LAGERASSISTENT'
-        });
+            benutzerVorname,
+            benutzerNachname,
+            benutzerEmail,
+            benutzerPasswort
+        }, 'LAGERASSISTENT');
 
         res.status(201).json({
             message: 'Lagerassistent erfolgreich erstellt.',
-            benutzerId: assistent.get('benutzerId')
+            benutzerId: neueBenutzerId
         });
     } catch (error) {
         if (error instanceof UniqueConstraintError) {
