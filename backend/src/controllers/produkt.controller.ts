@@ -1,5 +1,5 @@
 import { alleProdukte, produktById, searchProdukteByName } from "../services/produkt.service";
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { UniqueConstraintError } from 'sequelize';
 import { createProdukt , updateProdukt ,  deleteProdukt } from '../models/produkt.model';
 

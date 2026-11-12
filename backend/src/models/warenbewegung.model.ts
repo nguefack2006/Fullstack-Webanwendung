@@ -67,4 +67,3 @@ export async function getBewegungen(produktId: number) {
         }
     });
 }
-

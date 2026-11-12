@@ -1,16 +1,12 @@
 import { DataTypes, Op } from 'sequelize';
 import { sequelize } from '../config/postgres';
 import { Benutzer } from './benutzer.model';
-import { Warenbewegung } from './warenbewegung.model';
-
 
 const Produkt = sequelize.define('produkt', {
     produktId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false,
-        autoIncrement: true
-
+        allowNull: false
     },
 
     produktName: {
@@ -18,9 +14,9 @@ const Produkt = sequelize.define('produkt', {
         allowNull: false
     },
     produktBeschreibung: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
     produktMenge: {
         type: DataTypes.DECIMAL(12, 3),
         allowNull: false,
@@ -43,8 +39,6 @@ const Produkt = sequelize.define('produkt', {
     tableName: 'produkt',
     timestamps: false
 });
-
-export { Produkt };
 
 export function getAll() {
     return Produkt.findAll();
@@ -97,3 +91,4 @@ export function deleteProdukt(produktId: number) {
     });
 }
 
+export { Produkt };
