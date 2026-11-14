@@ -8,7 +8,7 @@ export async function wareneingangBuchen(
     benutzerId: number,
     menge: number
 ) {
-    
+
     if (!Number.isInteger(produktId) || produktId <= 0) {
         throw new Error('Ungültige Produkt-ID');
     }
@@ -51,7 +51,7 @@ export async function warenausgangBuchen(
     produktId: number,
     benutzerId: number,
     menge: number
-){
+) {
     if (!Number.isInteger(produktId) || produktId <= 0) {
         throw new Error('Ungültige Produkt-ID');
     }
@@ -62,14 +62,20 @@ export async function warenausgangBuchen(
         throw new Error('Ungültige Menge');
     }
 
-    return sequelize.transaction(async (transaction) =>{
-        const produkt = await Produkt.findByPk(produktId, { transaction });
+    return sequelize.transaction(async (transaction) => {
+        const produkt = await Produkt.findByPk(produktId, { transaction,
+             lock: transaction.LOCK.UPDATE
+         });
         if (!produkt) {
             throw new Error('Produkt nicht gefunden');
         }
-        const benutzer = await Benutzer.findByPk(benutzerId, { transaction });
+        const benutzer = await Benutzer.findByPk(benutzerId, { transaction
+         });
         if (!benutzer) {
             throw new Error('Benutzer nicht gefunden');
+        }
+        if (Number(produkt.get('produktMenge')) < menge) {
+            throw new Error("Nicht genügend Lagerbestand");
         }
 
         await produkt.decrement('produktMenge', { by: menge, transaction });
