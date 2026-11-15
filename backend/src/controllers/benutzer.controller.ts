@@ -80,10 +80,6 @@ export async function handleLogin(
         });
     });
 
-    eventBus.emit("JournalEvent", {
-        eventTyp: "BENUTZER_ANGEMELDET",
-        benutzerId
-    });
 
     res.status(200).json({
         message: 'Erfolgreich angemeldet.',
@@ -94,10 +90,6 @@ export async function handleLogin(
             benutzerEmail: benutzer.get('benutzerEmail'),
             benutzerRolle: benutzer.get('benutzerRolle')
         }
-    });
-    eventBus.emit("JournalEvent", {
-        eventTyp: "BENUTZER_ANGEMELDET",
-        benutzerId
     });
 }
 
