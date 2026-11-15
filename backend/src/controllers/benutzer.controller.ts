@@ -1,8 +1,9 @@
 import type { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcrypt';
-import { getBenutzerByEmail } from '../models/benutzer.model';
+import { getBenutzerByEmail, Benutzer } from '../models/benutzer.model';
 import { erstelleBenutzerKonto } from '../services/benutzer.service';
 import { UniqueConstraintError } from 'sequelize';
+import { eventBus } from "../events/event.bus";
 
 export async function handleLogin(
     req: Request,
@@ -49,7 +50,7 @@ export async function handleLogin(
         return;
     }
 
-   const benutzerId = benutzer.get('benutzerId');
+    const benutzerId = benutzer.get('benutzerId');
 
     if (typeof benutzerId !== 'number') {
         throw new Error('Ungültige Benutzer-ID.');
@@ -79,6 +80,11 @@ export async function handleLogin(
         });
     });
 
+    eventBus.emit("JournalEvent", {
+        eventTyp: "BENUTZER_ANGEMELDET",
+        benutzerId
+    });
+
     res.status(200).json({
         message: 'Erfolgreich angemeldet.',
         benutzer: {
@@ -88,6 +94,10 @@ export async function handleLogin(
             benutzerEmail: benutzer.get('benutzerEmail'),
             benutzerRolle: benutzer.get('benutzerRolle')
         }
+    });
+    eventBus.emit("JournalEvent", {
+        eventTyp: "BENUTZER_ANGEMELDET",
+        benutzerId
     });
 }
 
@@ -183,7 +193,12 @@ export async function handleRegisterLagerverwalter(
             message: 'Konto erfolgreich erstellt.',
             benutzerId: neueBenutzerId
         });
-        
+
+        eventBus.emit("JournalEvent", {
+            eventTyp: "BENUTZER_REGISTRIERT",
+            benutzerId
+        });
+
     } catch (error) {
         if (error instanceof UniqueConstraintError) {
             res.status(409).json({

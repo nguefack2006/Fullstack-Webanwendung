@@ -1,10 +1,12 @@
 import app from './app';
 import { sequelize } from './config/postgres';
+import { connectMongoDB } from "./config/mongodb";
 import "./models/produkt.model";
 import { sessionStore } from './config/session';
 import { Benutzer } from './models/benutzer.model';
 import { Produkt } from './models/produkt.model';
 import { Warenbewegung } from './models/warenbewegung.model';
+import "./events/journal.listener";
 
 async function startServer(): Promise<void> {
   try {
@@ -26,6 +28,7 @@ async function startServer(): Promise<void> {
     process.exitCode = 1;
   }
   await sequelize.sync();
+  await connectMongoDB();
 }
 
 void startServer();

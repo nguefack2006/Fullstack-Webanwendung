@@ -408,7 +408,7 @@ export const swaggerDocument = {
             }
           }
         },
-        "description": "Rolle wird serverseitig auf LAGERVERWALTER gesetzt. Benutzer-ID manuell angeben. Gemäß aktuellem Projektstand wird die Anzahl der Verwalter nicht geprüft. Die Registrierung meldet den Benutzer noch nicht an."
+
       }
     },
     "/api/auth/login": {
@@ -1276,6 +1276,40 @@ export const swaggerDocument = {
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/journal": {
+      get: {
+        tags: ["Journal"],
+        summary: "Alle Events aus MongoDB abrufen",
+        responses: {
+          200: {
+            description: "Events erfolgreich abgerufen",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      eventTyp: { type: "string" },
+                      produktId: { type: "integer" },
+                      benutzerId: { type: "integer" },
+                      menge: { type: "number" },
+                      zeitpunkt: {
+                        type: "string",
+                        format: "date-time"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          500: {
+            description: "Fehler beim Laden der Events"
           }
         }
       }

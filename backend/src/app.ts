@@ -10,7 +10,7 @@ import warenbewegungRoutes from './routes/warenbewegung.route';
 import statistikRoutes from './routes/statistik.route';
 import { sessionMiddleware } from './config/session';
 import { loadBenutzer } from './middlewares/authentifizierung';
-
+import journalRoutes from './routes/journal.route';
 const app = express(); 
 
 app.get('/api/ready', createReadinessHandler(() => sequelize.authenticate()));
@@ -32,6 +32,7 @@ app.use('/api/products', produktRoutes);
 app.use('/api/stock', stockRoutes);
 app.use('/api/products', warenbewegungRoutes);
 app.use('/api/products', statistikRoutes);
+app.use('/api/journal',journalRoutes);
 app.get('/', (req: Request, res: Response)=> {res.send ('Hello Wold !');
     
 });
