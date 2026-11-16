@@ -22,6 +22,7 @@ export class wareneingang {
       return;
     }
     this.http.post('/api/stock/wareneingang', {
+      
       produktId: this.produktId,
 
       menge: this.menge

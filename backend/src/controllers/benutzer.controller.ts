@@ -3,9 +3,6 @@ import bcrypt from 'bcrypt';
 import { Benutzer, getBenutzerByEmail } from '../models/benutzer.model';
 import { erstelleBenutzerKonto } from '../services/benutzer.service';
 import { UniqueConstraintError, ValidationError } from 'sequelize';
-import { getBenutzerByEmail, Benutzer } from '../models/benutzer.model';
-import { erstelleBenutzerKonto } from '../services/benutzer.service';
-import { UniqueConstraintError } from 'sequelize';
 import { eventBus } from "../events/event.bus";
 
 export async function handleLogin(
@@ -126,23 +123,12 @@ export async function handleRegisterLagerverwalter(
     next: NextFunction
 ): Promise<void> {
     const {
-        benutzerId,
         benutzerVorname,
         benutzerNachname,
         benutzerEmail,
         benutzerPasswort
     } = req.body ?? {};
 
-    if (
-        !Number.isInteger(benutzerId) ||
-        benutzerId < 1 ||
-        benutzerId > 2147483647
-    ) {
-        res.status(400).json({
-            message: 'Ungültige Benutzer-ID.'
-        });
-        return;
-    }
 
     const texte = [
         benutzerVorname,
@@ -187,7 +173,6 @@ export async function handleRegisterLagerverwalter(
             return;
         }
         const neueBenutzerId = await erstelleBenutzerKonto({
-            benutzerId,
             benutzerVorname,
             benutzerNachname,
             benutzerEmail,
@@ -197,11 +182,6 @@ export async function handleRegisterLagerverwalter(
         res.status(201).json({
             message: 'Konto erfolgreich erstellt.',
             benutzerId: neueBenutzerId
-        });
-
-        eventBus.emit("JournalEvent", {
-            eventTyp: "BENUTZER_REGISTRIERT",
-            benutzerId
         });
 
     } catch (error) {
@@ -245,23 +225,11 @@ export async function handleCreateLagerassistent(
     }
 
     const {
-        benutzerId,
         benutzerVorname,
         benutzerNachname,
         benutzerEmail,
         benutzerPasswort
     } = req.body ?? {};
-
-    if (
-        !Number.isInteger(benutzerId) ||
-        benutzerId < 1 ||
-        benutzerId > 2147483647
-    ) {
-        res.status(400).json({
-            message: 'Ungültige Benutzer-ID.'
-        });
-        return;
-    }
 
     const texte = [
         benutzerVorname,
@@ -295,7 +263,6 @@ export async function handleCreateLagerassistent(
 
     try {
         const neueBenutzerId = await erstelleBenutzerKonto({
-            benutzerId,
             benutzerVorname,
             benutzerNachname,
             benutzerEmail,

@@ -2,7 +2,6 @@ import bcrypt from 'bcrypt';
 import { createBenutzer } from '../models/benutzer.model';
 
 type NeuesKonto = {
-    benutzerId: number;
     benutzerVorname: string;
     benutzerNachname: string;
     benutzerEmail: string;
@@ -18,7 +17,6 @@ export async function erstelleBenutzerKonto(
     const benutzerPasswortHash = await bcrypt.hash(daten.benutzerPasswort, 12);
 
     const benutzer = await createBenutzer({
-        benutzerId: daten.benutzerId,
         benutzerVorname: daten.benutzerVorname.trim(),
         benutzerNachname: daten.benutzerNachname.trim(),
         benutzerEmail: daten.benutzerEmail.trim(),

@@ -49,18 +49,12 @@ export const swaggerDocument = {
       "AccountRequest": {
         "type": "object",
         "required": [
-          "benutzerId",
           "benutzerVorname",
           "benutzerNachname",
           "benutzerEmail",
           "benutzerPasswort"
         ],
         "properties": {
-          "benutzerId": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 2147483647
-          },
           "benutzerVorname": {
             "type": "string",
             "minLength": 1,
@@ -390,7 +384,6 @@ export const swaggerDocument = {
                 "$ref": "#/components/schemas/AccountRequest"
               },
               "example": {
-                "benutzerId": 910001,
                 "benutzerVorname": "Test",
                 "benutzerNachname": "Verwalter",
                 "benutzerEmail": "swagger.verwalter@example.test",
@@ -564,7 +557,6 @@ export const swaggerDocument = {
                 "$ref": "#/components/schemas/AccountRequest"
               },
               "example": {
-                "benutzerId": 910002,
                 "benutzerVorname": "Test",
                 "benutzerNachname": "Assistent",
                 "benutzerEmail": "swagger.assistent@example.test",
@@ -1107,15 +1099,10 @@ export const swaggerDocument = {
                 "type": "object",
                 "required": [
                   "produktId",
-                  "benutzerId",
                   "menge"
                 ],
                 "properties": {
                   "produktId": {
-                    "type": "integer",
-                    "minimum": 1
-                  },
-                  "benutzerId": {
                     "type": "integer",
                     "minimum": 1
                   },
@@ -1128,7 +1115,6 @@ export const swaggerDocument = {
               },
               "example": {
                 "produktId": 1,
-                "benutzerId": 1,
                 "menge": 3
               }
             }
@@ -1192,15 +1178,10 @@ export const swaggerDocument = {
                 "type": "object",
                 "required": [
                   "produktId",
-                  "benutzerId",
                   "menge"
                 ],
                 "properties": {
                   "produktId": {
-                    "type": "integer",
-                    "minimum": 1
-                  },
-                  "benutzerId": {
                     "type": "integer",
                     "minimum": 1
                   },
@@ -1213,7 +1194,6 @@ export const swaggerDocument = {
               },
               "example": {
                 "produktId": 1,
-                "benutzerId": 1,
                 "menge": 3
               }
             }

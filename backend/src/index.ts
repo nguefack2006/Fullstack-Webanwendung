@@ -16,7 +16,8 @@ async function startServer(): Promise<void> {
     await Warenbewegung.sync();
     await sessionStore.sync();
     console.log('Verbindung zu PostgreSQL erfolgreich');
-
+    await sequelize.sync();
+    await connectMongoDB();
     const port = Number(process.env.PORT);
 
     app.listen(port, () => {
@@ -27,8 +28,7 @@ async function startServer(): Promise<void> {
     await sequelize.close();
     process.exitCode = 1;
   }
-  await sequelize.sync();
-  await connectMongoDB();
+
 }
 
 void startServer();
