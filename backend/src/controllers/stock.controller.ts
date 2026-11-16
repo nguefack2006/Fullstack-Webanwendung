@@ -1,11 +1,12 @@
-import { wareneingangBuchen,warenausgangBuchen } from "../services/stock.service";
+import { wareneingangBuchen, warenausgangBuchen } from "../services/stock.service";
 import { Request, Response } from 'express';
 
 export async function buchenWareneingang(req: Request, res: Response) {
     try {
-        const { produktId, benutzerId, menge } = req.body;
+        const { produktId, benutzerId,menge } = req.body;
+        // const benutzerId = req.session.benutzerId;
 
-        const warenbewegung = await wareneingangBuchen(produktId, benutzerId, menge);
+        const warenbewegung = await wareneingangBuchen(produktId, benutzerId,menge);
 
         res.status(201).json(warenbewegung);
     } catch (error) {
