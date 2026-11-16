@@ -1,8 +1,8 @@
 import type { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcrypt';
-import { getBenutzerByEmail } from '../models/benutzer.model';
+import { Benutzer, getBenutzerByEmail } from '../models/benutzer.model';
 import { erstelleBenutzerKonto } from '../services/benutzer.service';
-import { UniqueConstraintError } from 'sequelize';
+import { UniqueConstraintError, ValidationError } from 'sequelize';
 
 export async function handleLogin(
     req: Request,
@@ -170,7 +170,17 @@ export async function handleRegisterLagerverwalter(
     }
 
     try {
+        const vorhandenerLagerverwalter = await Benutzer.findOne({
+            where: { benutzerRolle: 'LAGERVERWALTER' },
+            attributes: ['benutzerId']
+        });
 
+        if (vorhandenerLagerverwalter) {
+            res.status(409).json({
+                message: 'Ein Lagerverwalterkonto existiert bereits. Bitte melden Sie sich an.'
+            });
+            return;
+        }
         const neueBenutzerId = await erstelleBenutzerKonto({
             benutzerId,
             benutzerVorname,
@@ -189,6 +199,13 @@ export async function handleRegisterLagerverwalter(
             res.status(409).json({
                 message: 'Benutzer-ID oder E-Mail-Adresse bereits vergeben.'
             });
+            return;
+        }
+        if (
+            error instanceof ValidationError &&
+            error.errors.some(eintrag => eintrag.path === 'benutzerEmail')
+        ) {
+            res.status(400).json({ message: 'Ungültige E-Mail-Adresse.' });
             return;
         }
 
@@ -284,6 +301,13 @@ export async function handleCreateLagerassistent(
             res.status(409).json({
                 message: 'Benutzer-ID oder E-Mail-Adresse bereits vergeben.'
             });
+            return;
+        }
+        if (
+            error instanceof ValidationError &&
+            error.errors.some(eintrag => eintrag.path === 'benutzerEmail')
+        ) {
+            res.status(400).json({ message: 'Ungültige E-Mail-Adresse.' });
             return;
         }
 

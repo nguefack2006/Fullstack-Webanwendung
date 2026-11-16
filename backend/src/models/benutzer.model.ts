@@ -18,7 +18,10 @@ const Benutzer = sequelize.define('benutzer', {
     benutzerEmail:{
         type: DataTypes.STRING,
         allowNull:false,
-        unique:true
+        unique:true,
+        validate: { 
+            isEmail: true
+        }
     },
     benutzerGeburtsdatum:{
         type: DataTypes.DATE,
@@ -29,10 +32,20 @@ const Benutzer = sequelize.define('benutzer', {
         allowNull:false
     },
     benutzerPasswortHash: {
-    type: DataTypes.STRING,
-    allowNull: false,
+        type: DataTypes.STRING,
+        allowNull: false
     }
-})
+}, {
+    indexes: [
+        {
+            name: 'unique_lagerverwalter',
+            unique: true,
+            fields: ['benutzerRolle'],
+            where: { benutzerRolle: 'LAGERVERWALTER' }
+        }
+    ]
+});
+
 
 export function createBenutzer(daten: {
     benutzerId: number;

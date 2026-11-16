@@ -2,13 +2,11 @@ export const swaggerDocument = {
   "openapi": "3.0.3",
   "info": {
     "title": "Lagerverwaltung API",
-    "version": "1.0.0",
-    "description": "Dokumentation der aktuell implementierten Routen. Für Sitzungstests Swagger unter /api-docs/ auf demselben Backend öffnen. Testaufrufe verändern die Datenbank."
+    "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "/",
-      "description": "Backend, das diese Swagger-Seite bereitstellt"
+      "url": "/"
     }
   ],
   "tags": [
@@ -33,8 +31,7 @@ export const swaggerDocument = {
       "sessionCookie": {
         "type": "apiKey",
         "in": "cookie",
-        "name": "lager.sid",
-        "description": "Durch POST /api/auth/login gesetztes Browsercookie. Im Authorize-Dialog keinen Cookiewert manuell eintragen."
+        "name": "lager.sid"
       }
     },
     "schemas": {
@@ -67,26 +64,22 @@ export const swaggerDocument = {
           "benutzerVorname": {
             "type": "string",
             "minLength": 1,
-            "description": "Nach dem Entfernen äußerer Leerzeichen darf der Wert nicht leer sein.",
             "maxLength": 255
           },
           "benutzerNachname": {
             "type": "string",
             "minLength": 1,
-            "description": "Nach dem Entfernen äußerer Leerzeichen darf der Wert nicht leer sein.",
             "maxLength": 255
           },
           "benutzerEmail": {
             "type": "string",
             "minLength": 1,
-            "description": "Nach dem Entfernen äußerer Leerzeichen darf der Wert nicht leer sein.",
             "maxLength": 255
           },
           "benutzerPasswort": {
             "type": "string",
             "writeOnly": true,
-            "minLength": 1,
-            "description": "Nicht nur Leerzeichen. Höchstens 72 UTF-8-Bytes für bcrypt."
+            "minLength": 1
           }
         }
       },
@@ -149,8 +142,7 @@ export const swaggerDocument = {
         "properties": {
           "benutzerEmail": {
             "type": "string",
-            "minLength": 1,
-            "description": "Nach dem Entfernen äußerer Leerzeichen darf der Wert nicht leer sein."
+            "minLength": 1
           },
           "benutzerPasswort": {
             "type": "string",
@@ -189,13 +181,11 @@ export const swaggerDocument = {
           },
           "produktName": {
             "type": "string",
-            "minLength": 1,
-            "description": "Nach dem Entfernen äußerer Leerzeichen darf der Wert nicht leer sein."
+            "minLength": 1
           },
           "produktBeschreibung": {
             "type": "string",
-            "minLength": 1,
-            "description": "Nach dem Entfernen äußerer Leerzeichen darf der Wert nicht leer sein."
+            "minLength": 1
           }
         }
       },
@@ -204,13 +194,11 @@ export const swaggerDocument = {
         "properties": {
           "produktName": {
             "type": "string",
-            "minLength": 1,
-            "description": "Nach dem Entfernen äußerer Leerzeichen darf der Wert nicht leer sein."
+            "minLength": 1
           },
           "produktBeschreibung": {
             "type": "string",
-            "minLength": 1,
-            "description": "Nach dem Entfernen äußerer Leerzeichen darf der Wert nicht leer sein."
+            "minLength": 1
           }
         },
         "anyOf": [
@@ -243,18 +231,15 @@ export const swaggerDocument = {
           },
           "produktName": {
             "type": "string",
-            "minLength": 1,
-            "description": "Nach dem Entfernen äußerer Leerzeichen darf der Wert nicht leer sein."
+            "minLength": 1
           },
           "produktBeschreibung": {
             "type": "string",
-            "minLength": 1,
-            "description": "Nach dem Entfernen äußerer Leerzeichen darf der Wert nicht leer sein."
+            "minLength": 1
           },
           "produktMenge": {
             "type": "string",
-            "example": "0.000",
-            "description": "PostgreSQL DECIMAL, von Sequelize üblicherweise als Zeichenkette zurückgegeben."
+            "example": "0.000"
           },
           "erstelltVon": {
             "type": "integer",
@@ -301,7 +286,9 @@ export const swaggerDocument = {
   "paths": {
     "/api/ready": {
       "get": {
-        "tags": ["System"],
+        "tags": [
+          "System"
+        ],
         "summary": "Bereitschaft des Backends prüfen",
         "security": [],
         "responses": {
@@ -309,7 +296,9 @@ export const swaggerDocument = {
             "description": "PostgreSQL ist erreichbar",
             "content": {
               "application/json": {
-                "example": { "status": "ready" }
+                "example": {
+                  "status": "ready"
+                }
               }
             }
           },
@@ -317,7 +306,9 @@ export const swaggerDocument = {
             "description": "PostgreSQL ist nicht erreichbar",
             "content": {
               "application/json": {
-                "example": { "status": "not_ready" }
+                "example": {
+                  "status": "not_ready"
+                }
               }
             }
           }
@@ -407,8 +398,7 @@ export const swaggerDocument = {
               }
             }
           }
-        },
-        "description": "Rolle wird serverseitig auf LAGERVERWALTER gesetzt. Benutzer-ID manuell angeben. Gemäß aktuellem Projektstand wird die Anzahl der Verwalter nicht geprüft. Die Registrierung meldet den Benutzer noch nicht an."
+        }
       }
     },
     "/api/auth/login": {
@@ -432,8 +422,7 @@ export const swaggerDocument = {
               "Set-Cookie": {
                 "schema": {
                   "type": "string"
-                },
-                "description": "lager.sid mit Path=/, HttpOnly und SameSite=Lax"
+                }
               }
             }
           },
@@ -474,8 +463,7 @@ export const swaggerDocument = {
               }
             }
           }
-        },
-        "description": "Erzeugt nach erfolgreicher Passwortprüfung eine neue Sitzung. Für geschützte Tests zuerst hier anmelden und denselben Browser sowie denselben Host verwenden."
+        }
       }
     },
     "/api/auth/logout": {
@@ -499,8 +487,7 @@ export const swaggerDocument = {
           "500": {
             "description": "Unerwarteter Server- oder Datenbankfehler. Der aktuelle Express-Standardhandler kann HTML zurückgeben."
           }
-        },
-        "description": "Im aktuellen Controller auch ohne vorherige Anmeldung aufrufbar."
+        }
       }
     },
     "/api/users/assistants": {
@@ -585,8 +572,7 @@ export const swaggerDocument = {
               }
             }
           }
-        },
-        "description": "Rolle wird serverseitig auf LAGERASSISTENT gesetzt. Erfordert eine gültige Verwaltersitzung."
+        }
       }
     },
     "/api/products": {
@@ -669,8 +655,7 @@ export const swaggerDocument = {
               }
             }
           }
-        },
-        "description": "Bestand beginnt bei 0. erstelltVon wird aus dem angemeldeten Benutzer übernommen. Produkt-ID manuell angeben."
+        }
       },
       "get": {
         "tags": [
@@ -800,8 +785,7 @@ export const swaggerDocument = {
               }
             }
           }
-        },
-        "description": "Mindestens Name oder Beschreibung angeben. Bestand und Ersteller werden nicht geändert."
+        }
       },
       "delete": {
         "summary": "Produkt löschen",
@@ -860,8 +844,7 @@ export const swaggerDocument = {
           "500": {
             "description": "Unerwarteter Server- oder Datenbankfehler. Der aktuelle Express-Standardhandler kann HTML zurückgeben."
           }
-        },
-        "description": "Löscht tatsächlich Daten. Ausschließlich ein eigens angelegtes Testprodukt verwenden. Der aktuelle Controller enthält keine zusätzliche Prüfung auf MongoDB-Bewegungen."
+        }
       },
       "get": {
         "tags": [
@@ -1281,5 +1264,4 @@ export const swaggerDocument = {
       }
     }
   }
-
 };
