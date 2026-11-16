@@ -2,11 +2,13 @@ import { DataTypes, Op } from 'sequelize';
 import { sequelize } from '../config/postgres';
 import { Benutzer } from './benutzer.model';
 
+
 const Produkt = sequelize.define('produkt', {
     produktId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
+        autoIncrement: true
     },
 
     produktName: {
@@ -59,13 +61,11 @@ export function searchByName(name: string) {
 }
 
 export function createProdukt(produkt: {
-    produktId: number;
     produktName: string;
     produktBeschreibung: string;
     erstelltVon: number;
 }) {
     return Produkt.create({
-        produktId: produkt.produktId,
         produktName: produkt.produktName,
         produktBeschreibung: produkt.produktBeschreibung,
         erstelltVon: produkt.erstelltVon
@@ -77,11 +77,12 @@ export function updateProdukt(
     daten: {
         produktName?: string;
         produktBeschreibung?: string;
+        produktMenge?:number;
     }
 ) {
     return Produkt.update(daten, {
         where: { produktId },
-        fields: ['produktName', 'produktBeschreibung']
+        fields: ['produktName', 'produktBeschreibung','produktMenge']
     });
 }
 

@@ -1,3 +1,4 @@
+import { Trim } from './../../node_modules/@sinclair/typebox/build/cjs/type/helpers/helpers.d';
 import { alleProdukte, produktById, searchProdukteByName } from "../services/produkt.service";
 import type { Request, Response } from 'express';
 import { UniqueConstraintError } from 'sequelize';
@@ -75,10 +76,9 @@ export async function handleCreateProdukt(req: Request, res: Response): Promise<
         return;
     }
 
-    const { produktId, produktName, produktBeschreibung } = req.body ?? {};
+    const {  produktName, produktBeschreibung } = req.body ?? {};
 
     if (
-        !Number.isInteger(produktId) || produktId < 1 || produktId > 2147483647 ||
         typeof produktName !== 'string' || !produktName.trim() ||
         typeof produktBeschreibung !== 'string' || !produktBeschreibung.trim()
     ) {
@@ -88,7 +88,6 @@ export async function handleCreateProdukt(req: Request, res: Response): Promise<
 
     try {
         const produkt = await createProdukt({
-            produktId,
             produktName: produktName.trim(),
             produktBeschreibung: produktBeschreibung.trim(),
             erstelltVon: benutzer.benutzerId
@@ -132,11 +131,11 @@ export async function handleUpdateProdukt(
         return;
     }
 
-    const { produktName, produktBeschreibung } = req.body ?? {};
+    const { produktName, produktBeschreibung, produktMenge} = req.body ?? {};
 
-    if (produktName === undefined && produktBeschreibung === undefined) {
+    if (produktName === undefined && produktBeschreibung === undefined && produktMenge === undefined) {
         res.status(400).json({
-            message: 'Bitte Name oder Beschreibung angeben.'
+            message: 'Bitte Name, Beschreibung oder Menge angeben.'
         });
         return;
     }
@@ -157,10 +156,19 @@ export async function handleUpdateProdukt(
         res.status(400).json({ message: 'Ungültige Beschreibung.' });
         return;
     }
+    if(produktMenge !== undefined && 
+        (typeof produktMenge !== 'number'|| 
+            produktMenge <0)
+        
+    ){ 
+        res.status(400).json({message: 'Ungültige Menge.'});
+        return
+    }
 
     const daten: {
         produktName?: string;
         produktBeschreibung?: string;
+        produktMenge?:number;
     } = {};
 
     if (produktName !== undefined) {
@@ -169,6 +177,10 @@ export async function handleUpdateProdukt(
 
     if (produktBeschreibung !== undefined) {
         daten.produktBeschreibung = produktBeschreibung.trim();
+    }
+
+    if (produktMenge !==undefined){
+        daten.produktMenge = produktMenge
     }
 
     const [anzahl] = await updateProdukt(produktId, daten);

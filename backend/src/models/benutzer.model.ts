@@ -5,7 +5,8 @@ const Benutzer = sequelize.define('benutzer', {
     benutzerId:{
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull:false   
+        allowNull:false,
+        autoIncrement: true   
     },
     benutzerVorname:{
         type: DataTypes.STRING,
@@ -48,7 +49,6 @@ const Benutzer = sequelize.define('benutzer', {
 
 
 export function createBenutzer(daten: {
-    benutzerId: number;
     benutzerVorname: string;
     benutzerNachname: string;
     benutzerEmail: string;
@@ -57,7 +57,6 @@ export function createBenutzer(daten: {
     benutzerGeburtsdatum?: Date;
 }) {
     return Benutzer.create({
-        benutzerId: daten.benutzerId,
         benutzerVorname: daten.benutzerVorname,
         benutzerNachname: daten.benutzerNachname,
         benutzerEmail: daten.benutzerEmail,
