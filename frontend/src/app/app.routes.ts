@@ -1,11 +1,17 @@
 import { Routes } from '@angular/router';
-import { wareneingang } from './wareneingang/wareneingang';
+
+import { AnmeldenComponent } from './anmelden/anmelden.component';
+import {wareneingang } from './wareneingang/wareneingang';
 
 export const routes: Routes = [
-      {
+  {
     path: '',
-    redirectTo: 'wareneingang',
+    redirectTo: 'anmelden',
     pathMatch: 'full'
+  },
+  {
+    path: 'anmelden',
+    component: AnmeldenComponent
   },
   {
     path: 'wareneingang',
