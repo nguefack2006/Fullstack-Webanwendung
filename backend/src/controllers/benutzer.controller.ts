@@ -184,6 +184,11 @@ export async function handleRegisterLagerverwalter(
             benutzerId: neueBenutzerId
         });
 
+        eventBus.emit("JournalEvent", {
+            eventTyp: "BENUTZER_REGISTRIERT",
+            benutzerId
+        });
+
     } catch (error) {
         if (error instanceof UniqueConstraintError) {
             res.status(409).json({
@@ -230,6 +235,17 @@ export async function handleCreateLagerassistent(
         benutzerEmail,
         benutzerPasswort
     } = req.body ?? {};
+
+    if (
+        !Number.isInteger(benutzerId) ||
+        benutzerId < 1 ||
+        benutzerId > 2147483647
+    ) {
+        res.status(400).json({
+            message: 'Ungültige Benutzer-ID.'
+        });
+        return;
+    }
 
     const texte = [
         benutzerVorname,

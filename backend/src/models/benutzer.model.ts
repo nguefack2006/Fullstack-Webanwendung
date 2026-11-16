@@ -5,8 +5,13 @@ const Benutzer = sequelize.define('benutzer', {
     benutzerId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
+<<<<<<< HEAD
         autoIncrement: true,
         allowNull: false
+=======
+        allowNull:false,
+        autoIncrement: true   
+>>>>>>> a513851e917b27617574dfd5c170f83f99365934
     },
     benutzerVorname: {
         type: DataTypes.STRING,

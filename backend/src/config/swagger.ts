@@ -97,18 +97,13 @@ export const swaggerDocument = {
       "Benutzer": {
         "type": "object",
         "required": [
-          "benutzerId",
+
           "benutzerVorname",
           "benutzerNachname",
           "benutzerEmail",
           "benutzerRolle"
         ],
         "properties": {
-          "benutzerId": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 2147483647
-          },
           "benutzerVorname": {
             "type": "string"
           },
@@ -163,16 +158,10 @@ export const swaggerDocument = {
       "ProduktCreate": {
         "type": "object",
         "required": [
-          "produktId",
           "produktName",
           "produktBeschreibung"
         ],
         "properties": {
-          "produktId": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 2147483647
-          },
           "produktName": {
             "type": "string",
             "minLength": 1
@@ -641,7 +630,6 @@ export const swaggerDocument = {
                 "$ref": "#/components/schemas/ProduktCreate"
               },
               "example": {
-                "produktId": 920001,
                 "produktName": "Swagger Testprodukt",
                 "produktBeschreibung": "Nur für den API-Test"
               }
@@ -773,7 +761,10 @@ export const swaggerDocument = {
                 "$ref": "#/components/schemas/ProduktPatch"
               },
               "example": {
-                "produktName": "Swagger Testprodukt geändert"
+                "produktName": "Swagger Testprodukt geändert",
+                "produktBeschreibung": "Neues Name",
+                'produktMenge': 2
+
               }
             }
           }
