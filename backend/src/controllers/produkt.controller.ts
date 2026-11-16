@@ -1,7 +1,7 @@
 import { alleProdukte, produktById, searchProdukteByName } from "../services/produkt.service";
 import type { Request, Response } from 'express';
 import { UniqueConstraintError } from 'sequelize';
-import { createProdukt , updateProdukt ,  deleteProdukt } from '../models/produkt.model';
+import { createProdukt, updateProdukt, deleteProdukt } from '../models/produkt.model';
 
 export async function getAllProdukte(req: Request, res: Response) {
     try {
@@ -18,15 +18,25 @@ export async function getAllProdukte(req: Request, res: Response) {
 export async function getProduktById(req: Request, res: Response) {
     try {
         const produktId = Number(req.params.id);
+
+        console.log("[PRODUKT] Suche nach ID:", produktId);
+
         const produkt = await produktById(produktId);
 
+
         if (!produkt) {
+
+            console.warn("[PRODUKT] Nicht gefunden:", produktId);
+
             res.status(404).json({ error: 'Produkt nicht gefunden' });
             return;
         }
 
+        console.log("[PRODUKT] Gefunden:", produktId);
+
         res.status(200).json(produkt);
     } catch (error) {
+        console.error("[PRODUKT] Suchfehler:", error);
         console.error('Fehler beim Abrufen des Produkts:', error);
         res.status(500).json({ error: 'Fehler beim Abrufen des Produkts' });
     }
@@ -35,8 +45,12 @@ export async function getProduktById(req: Request, res: Response) {
 export async function suchProdukteByName(req: Request, res: Response) {
     try {
         const name = req.query.name as string;
+
+        console.log("[PRODUKT] Suche nach Name:", name);
+
         const produkte = await searchProdukteByName(name);
         if (!produkte || produkte.length === 0) {
+            console.warn("[PRODUKT] Ungültiger Suchbegriff");
             res.status(400).json({ error: 'Ungültiger Suchbegriff' });
             return;
         }
@@ -52,8 +66,8 @@ export async function handleCreateProdukt(req: Request, res: Response): Promise<
     const benutzer = res.locals.benutzer;
 
     if (!benutzer) {
-    res.status(401).json({ message: 'Bitte anmelden.' });
-    return;
+        res.status(401).json({ message: 'Bitte anmelden.' });
+        return;
     }
 
     if (benutzer.benutzerRolle !== 'LAGERVERWALTER') {

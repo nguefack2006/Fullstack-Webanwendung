@@ -10,6 +10,14 @@ export async function wareneingangBuchen(
     benutzerId: number,
     menge: number
 ) {
+
+    console.log("[WARENEINGANG] Gestartet", {
+        produktId,
+        benutzerId,
+        menge
+    });
+
+
     if (!Number.isInteger(produktId) || produktId <= 0) {
         throw new Error("Ungültige Produkt-ID");
     }
@@ -47,6 +55,11 @@ export async function wareneingangBuchen(
 
         return warenbewegung;
     });
+    console.log("[WARENEINGANG] COMMIT erfolgreich", {
+        produktId,
+        menge
+    });
+
 
     eventBus.emit("WarenbewegungErfasst", {
         eventTyp: "WARENEINGANG",
@@ -54,6 +67,8 @@ export async function wareneingangBuchen(
         benutzerId,
         menge
     });
+
+    console.log("[WARENEINGANG] Journal-Event veröffentlicht");
 
     return warenbewegung;
 }
@@ -63,6 +78,13 @@ export async function warenausgangBuchen(
     benutzerId: number,
     menge: number
 ) {
+
+    console.log("[WARENAUSGANG] Buchung gestartet", {
+        produktId,
+        benutzerId,
+        menge
+    });
+
     if (!Number.isInteger(produktId) || produktId <= 0) {
         throw new Error("Ungültige Produkt-ID");
     }
@@ -93,6 +115,11 @@ export async function warenausgangBuchen(
         }
 
         if (Number(produkt.get("produktMenge")) < menge) {
+            console.warn("[WARENAUSGANG] Nicht genügend Bestand", {
+                produktId,
+                menge,
+                angefordert: menge
+            });
             throw new Error("Nicht genügend Lagerbestand");
         }
 
@@ -108,12 +135,19 @@ export async function warenausgangBuchen(
         return warenbewegung;
     });
 
+    console.log("[WARENAUSGANG] COMMIT erfolgreich", {
+        produktId,
+        menge
+    });
+
     eventBus.emit("WarenbewegungErfasst", {
         eventTyp: "WARENAUSGANG",
         produktId,
         benutzerId,
         menge
     });
+
+    console.log("[WARENAUSGANG] Journal-Event veröffentlicht");
 
     return warenbewegung;
 }
