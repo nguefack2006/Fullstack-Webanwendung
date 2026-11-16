@@ -1,0 +1,41 @@
+@if (benutzer(); as konto) {
+    <h1>Willkommen, {{ konto.benutzerVorname }}!</h1>
+
+    <button type="button" (click)="abmelden()" [disabled]="laedt()">
+        {{ laedt() ? 'Abmeldung läuft …' : 'Abmelden' }}
+    </button>
+} @else {
+    <h1>Anmelden</h1>
+
+    <form [formGroup]="formular" (ngSubmit)="anmelden()">
+        <div>
+            <label for="email">E-Mail-Adresse</label>
+            <input
+                id="email"
+                type="email"
+                autocomplete="username"
+                formControlName="benutzerEmail"
+                required
+            >
+        </div>
+
+        <div>
+            <label for="passwort">Passwort</label>
+            <input
+                id="passwort"
+                type="password"
+                autocomplete="current-password"
+                formControlName="benutzerPasswort"
+                required
+            >
+        </div>
+
+        <button type="submit" [disabled]="formular.invalid || laedt()">
+            {{ laedt() ? 'Anmeldung läuft …' : 'Anmelden' }}
+        </button>
+    </form>
+}
+
+@if (fehler()) {
+    <p role="alert">{{ fehler() }}</p>
+}
