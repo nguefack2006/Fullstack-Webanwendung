@@ -3,7 +3,6 @@ import bcrypt from 'bcrypt';
 import { Benutzer, getBenutzerByEmail } from '../models/benutzer.model';
 import { erstelleBenutzerKonto } from '../services/benutzer.service';
 import { UniqueConstraintError, ValidationError } from 'sequelize';
-import { eventBus } from "../events/event.bus";
 
 export async function handleLogin(
     req: Request,
@@ -184,11 +183,6 @@ export async function handleRegisterLagerverwalter(
             benutzerId: neueBenutzerId
         });
 
-        eventBus.emit("JournalEvent", {
-            eventTyp: "BENUTZER_REGISTRIERT",
-            benutzerId
-        });
-
     } catch (error) {
         if (error instanceof UniqueConstraintError) {
             res.status(409).json({
@@ -236,16 +230,6 @@ export async function handleCreateLagerassistent(
         benutzerPasswort
     } = req.body ?? {};
 
-    if (
-        !Number.isInteger(benutzerId) ||
-        benutzerId < 1 ||
-        benutzerId > 2147483647
-    ) {
-        res.status(400).json({
-            message: 'Ungültige Benutzer-ID.'
-        });
-        return;
-    }
 
     const texte = [
         benutzerVorname,
