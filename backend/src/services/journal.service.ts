@@ -6,9 +6,10 @@ export async function getAllEvents() {
 
 export async function saveEvent(daten: {
     eventTyp: string;
-    produktId: number;
-    benutzerId: number;
-    menge: number;
+    produktId?: number;
+    benutzerId?: number;
+    benutzerNachname?: string;
+    menge?: number;
 }) {
     return Journal.create(daten);
 }

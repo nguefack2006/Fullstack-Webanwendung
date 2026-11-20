@@ -4,6 +4,7 @@ const journalSchema = new mongoose.Schema({
     eventTyp: String,
     produktId: Number,
     benutzerId: Number,
+    benutzerNachname: String,
     menge: Number,
     zeitpunkt: {
         type: Date,
