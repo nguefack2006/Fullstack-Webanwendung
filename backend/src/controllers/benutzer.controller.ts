@@ -79,7 +79,11 @@ export async function handleLogin(
         });
     });
 
-
+    eventBus.emit("BenutzerAngemeldet", {
+        eventTyp: "BENUTZER_ANGEMELDET",
+        benutzerId,
+        benutzerNachname: benutzer.get("benutzerNachname")
+    });
     res.status(200).json({
         message: 'Erfolgreich angemeldet.',
         benutzer: {
@@ -97,6 +101,7 @@ export function handleLogout(
     res: Response,
     next: NextFunction
 ): void {
+    const benutzer = res.locals.benutzer;
     req.session.destroy((error) => {
         if (error) {
             next(error);
@@ -109,6 +114,14 @@ export function handleLogout(
             secure: false,
             sameSite: 'lax'
         });
+        
+        if (benutzer) {
+            eventBus.emit("BenutzerAbgemeldet", {
+                eventTyp: "BENUTZER_ABGEMELDET",
+                benutzerId: benutzer.benutzerId,
+                benutzerNachname: benutzer.benutzerNachname
+            });
+        }
 
         res.status(200).json({
             message: 'Erfolgreich abgemeldet.'
@@ -178,10 +191,17 @@ export async function handleRegisterLagerverwalter(
             benutzerPasswort
         }, 'LAGERVERWALTER');
 
+        eventBus.emit("Verwalterregistriert", {
+            eventTyp: "VERWALTER_REGISTRIERT",
+            benutzerId: neueBenutzerId,
+            benutzerNachname: benutzerNachname.trim()
+        });
         res.status(201).json({
             message: 'Konto erfolgreich erstellt.',
             benutzerId: neueBenutzerId
         });
+
+        
 
     } catch (error) {
         if (error instanceof UniqueConstraintError) {
@@ -268,6 +288,12 @@ export async function handleCreateLagerassistent(
             benutzerEmail,
             benutzerPasswort
         }, 'LAGERASSISTENT');
+
+         eventBus.emit("Assistentregistriert", {
+            eventTyp: "ASSISTENT_REGISTRIERT",
+            benutzerId: neueBenutzerId,
+            benutzerNachname: benutzerNachname.trim()
+        });
 
         res.status(201).json({
             message: 'Lagerassistent erfolgreich erstellt.',

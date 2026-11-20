@@ -3,6 +3,7 @@ import { alleProdukte, produktById, searchProdukteByName } from "../services/pro
 import type { Request, Response } from 'express';
 import { UniqueConstraintError } from 'sequelize';
 import { createProdukt, updateProdukt, deleteProdukt } from '../models/produkt.model';
+import { eventBus } from "../events/event.bus";
 
 export async function getAllProdukte(req: Request, res: Response) {
     try {
@@ -91,6 +92,11 @@ export async function handleCreateProdukt(req: Request, res: Response): Promise<
             produktName: produktName.trim(),
             produktBeschreibung: produktBeschreibung.trim(),
             erstelltVon: benutzer.benutzerId
+        });
+
+        eventBus.emit("Produktangelegt", {
+            eventTyp: "PRODUKT_ANGELEGT",
+            produktId: produkt.get("produktId"),
         });
 
         res.status(201).json(produkt);
@@ -226,6 +232,10 @@ export async function handleDeleteProdukt(
         res.status(404).json({ message: 'Produkt nicht gefunden.' });
         return;
     }
+    eventBus.emit("Produktdelete", {
+            eventTyp: "PRODUKT_DELETE",
+            produktId,
+        });
 
     res.status(204).send();
 }

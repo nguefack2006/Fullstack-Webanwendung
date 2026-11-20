@@ -20,6 +20,8 @@ async function startServer(): Promise<void> {
     await connectMongoDB();
     const port = Number(process.env.PORT);
 
+    await connectMongoDB();
+
     app.listen(port, () => {
       console.log(`Server running on http://localhost:${port}`);
     });
@@ -28,6 +30,7 @@ async function startServer(): Promise<void> {
     await sequelize.close();
     process.exitCode = 1;
   }
+  
 
 }
 
