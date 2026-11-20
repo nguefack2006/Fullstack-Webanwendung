@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import { Benutzer, getBenutzerByEmail } from '../models/benutzer.model';
 import { erstelleBenutzerKonto } from '../services/benutzer.service';
 import { UniqueConstraintError, ValidationError } from 'sequelize';
+import { eventBus } from '../events/event.bus';
 
 export async function handleLogin(
     req: Request,

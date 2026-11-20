@@ -85,9 +85,6 @@ export async function warenausgangBuchen(
         throw new Error("Ungültige Produkt-ID");
     }
 
-    if (!Number.isInteger(benutzerId) || benutzerId <= 0) {
-        throw new Error("Ungültige Benutzer-ID");
-    }
 
     if (!Number.isFinite(menge) || menge <= 0) {
         throw new Error("Ungültige Menge");

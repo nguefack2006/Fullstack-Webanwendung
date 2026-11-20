@@ -27,7 +27,14 @@ export async function buchenWareneingang(req: Request, res: Response) {
 
 export async function buchenWarenausgang(req: Request, res: Response) {
     try {
-        const { produktId, benutzerId, menge } = req.body;
+        const { produktId, menge } = req.body;
+        const benutzerId = req.session.benutzerId;
+
+        if (benutzerId === undefined) {
+            return res.status(401).json({
+                error: 'Bitte zuerst anmelden'
+            });
+        }
 
         const warenbewegung = await warenausgangBuchen(produktId, benutzerId, menge);
 

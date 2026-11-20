@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
@@ -15,27 +15,25 @@ export class wareneingang {
   meldung = '';
 
   constructor(private http: HttpClient) { }
+  private cdr = inject(ChangeDetectorRef);
 
   buchen() {
-    if (this.produktId <= 0 || this.menge <= 0) {
-      this.meldung = 'Bitte gültige Werte eingrben!'
-      return;
-    }
-    this.http.post('/api/stock/wareneingang', {
-      
-      produktId: this.produktId,
-
-      menge: this.menge
-    }, {
-      withCredentials: true
-    }).subscribe({
+    this.http.post(
+      '/api/stock/wareneingang',
+      {
+        produktId: this.produktId,
+        menge: this.menge
+      },
+      { withCredentials: true }
+    ).subscribe({
       next: () => {
-        this.meldung = 'Wareneingang erfolgreich!';
-        console.log('Wareneingang erfolgreich gebucht');
+        this.meldung = 'Wareneingang erfasst!';
+        this.cdr.detectChanges();
       },
       error: (fehler) => {
-        this.meldung = 'Fehler beim Wareneingang!';
-        console.error(fehler);
+        this.meldung =
+          fehler.error?.error || 'Fehler beim Wareneingang!';
+        this.cdr.detectChanges();
       }
     });
   }
