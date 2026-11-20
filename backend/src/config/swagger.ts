@@ -1090,15 +1090,10 @@ export const swaggerDocument = {
                 "type": "object",
                 "required": [
                   "produktId",
-                  "benutzerId",
                   "menge"
                 ],
                 "properties": {
                   "produktId": {
-                    "type": "integer",
-                    "minimum": 1
-                  },
-                  "benutzerId": {
                     "type": "integer",
                     "minimum": 1
                   },
@@ -1111,7 +1106,6 @@ export const swaggerDocument = {
               },
               "example": {
                 "produktId": 1,
-                "benutzerId": 1,
                 "menge": 3
               }
             }
@@ -1175,15 +1169,10 @@ export const swaggerDocument = {
                 "type": "object",
                 "required": [
                   "produktId",
-                  "benutzerId",
                   "menge"
                 ],
                 "properties": {
                   "produktId": {
-                    "type": "integer",
-                    "minimum": 1
-                  },
-                  "benutzerId": {
                     "type": "integer",
                     "minimum": 1
                   },
@@ -1196,7 +1185,6 @@ export const swaggerDocument = {
               },
               "example": {
                 "produktId": 1,
-                "benutzerId": 1,
                 "menge": 3
               }
             }

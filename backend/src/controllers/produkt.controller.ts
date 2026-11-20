@@ -1,4 +1,4 @@
-import { Trim } from './../../node_modules/@sinclair/typebox/build/cjs/type/helpers/helpers.d';
+// import { Trim } from './../../node_modules/@sinclair/typebox/build/cjs/type/helpers/helpers.d';
 import { alleProdukte, produktById, searchProdukteByName } from "../services/produkt.service";
 import type { Request, Response } from 'express';
 import { UniqueConstraintError } from 'sequelize';

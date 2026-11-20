@@ -16,7 +16,8 @@ async function startServer(): Promise<void> {
     await Warenbewegung.sync();
     await sessionStore.sync();
     console.log('Verbindung zu PostgreSQL erfolgreich');
-
+    await sequelize.sync();
+    await connectMongoDB();
     const port = Number(process.env.PORT);
 
     await connectMongoDB();
@@ -30,6 +31,7 @@ async function startServer(): Promise<void> {
     process.exitCode = 1;
   }
   
+
 }
 
 void startServer();

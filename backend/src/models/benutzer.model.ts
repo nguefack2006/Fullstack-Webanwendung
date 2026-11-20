@@ -2,35 +2,35 @@ import { DataType, DataTypes } from "sequelize"
 import { sequelize } from "../config/postgres"
 
 const Benutzer = sequelize.define('benutzer', {
-    benutzerId:{
+    benutzerId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull:false,
-        autoIncrement: true   
+        autoIncrement: true,
+        allowNull: false
     },
-    benutzerVorname:{
+    benutzerVorname: {
         type: DataTypes.STRING,
-        allowNull:false
+        allowNull: false
     },
-    benutzerNachname:{
+    benutzerNachname: {
         type: DataTypes.STRING,
-        allowNull:false
+        allowNull: false
     },
-    benutzerEmail:{
+    benutzerEmail: {
         type: DataTypes.STRING,
-        allowNull:false,
-        unique:true,
-        validate: { 
+        allowNull: false,
+        unique: true,
+        validate: {
             isEmail: true
         }
     },
-    benutzerGeburtsdatum:{
+    benutzerGeburtsdatum: {
         type: DataTypes.DATE,
-        allowNull:true
+        allowNull: true
     },
-    benutzerRolle:{
+    benutzerRolle: {
         type: DataTypes.ENUM('LAGERVERWALTER', 'LAGERASSISTENT'),
-        allowNull:false
+        allowNull: false
     },
     benutzerPasswortHash: {
         type: DataTypes.STRING,

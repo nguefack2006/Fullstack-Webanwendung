@@ -1,0 +1,28 @@
+<h2>Wareneingang erfassen</h2>
+
+<form (ngSubmit)="buchen()">
+
+  <label>Produkt-ID:</label>
+  <input
+    type="number"
+    name="produktId"
+    [(ngModel)]="produktId"
+    required
+  >
+
+  <label>Menge:</label>
+  <input
+    type="number"
+    name="menge"
+    [(ngModel)]="menge"
+    min="1"
+    required
+  >
+
+  <button type="submit">
+    Wareneingang buchen
+  </button>
+
+</form>
+
+<p>{{ meldung }}</p>
