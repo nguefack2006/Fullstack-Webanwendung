@@ -30,6 +30,7 @@ export class ShowAllProdukt implements OnInit {
   meldung = '';
   produkte: Produkt[] = [];
   ausgewaehltesProdukt: Produkt | null = null;
+  urspruenglichesProdukt: Produkt | null = null;
 
   private http = inject(HttpClient);
   private cdr = inject(ChangeDetectorRef);
@@ -113,38 +114,93 @@ export class ShowAllProdukt implements OnInit {
   }
 
   produktBearbeiten(produkt: Produkt) {
+    this.urspruenglichesProdukt = { ...produkt };
     this.ausgewaehltesProdukt = { ...produkt };
     this.neueMenge = Number(produkt.produktMenge);
-
-  }
+}
 
   bearbeitenAbbrechen() {
     this.ausgewaehltesProdukt = null;
+    this.urspruenglichesProdukt = null;
   }
 
   aenderungenSpeichern() {
-    if (!this.ausgewaehltesProdukt) return;
+    if (!this.ausgewaehltesProdukt || !this.urspruenglichesProdukt) return;
 
     const produkt = this.ausgewaehltesProdukt;
+    const vorher = this.urspruenglichesProdukt;
+    const produktName = produkt.produktName.trim();
+    const produktBeschreibung = produkt.produktBeschreibung.trim();
+    const mengeEingabe = produkt.produktMenge;
+
+    this.meldung = '';
+
+    if (!produktName || produktName.length > 255) {
+        this.meldung = 'Bitte einen Produktnamen mit maximal 255 Zeichen eingeben.';
+        return;
+    }
+    
+    if (!produktBeschreibung || produktBeschreibung.length > 255) {
+      this.meldung = 'Bitte eine Beschreibung mit maximal 255 Zeichen eingeben.';
+      return;
+    }
+
+    if (
+        mengeEingabe === null ||
+        mengeEingabe === undefined ||
+        mengeEingabe === ''
+    ) {
+        this.meldung = 'Bitte eine gültige Menge eingeben.';
+        return;
+    }
+
+    const produktMenge = Number(mengeEingabe);
+
+    if (!Number.isFinite(produktMenge) || produktMenge < 0) {
+        this.meldung = 'Die Menge muss eine Zahl ab 0 sein.';
+        return;
+    }
+
+    const daten: {
+        produktName?: string;
+        produktMenge?: number;
+        produktBeschreibung?: string;
+    } = {};
+
+    if (produktName !== vorher.produktName) {
+        daten.produktName = produktName;
+    }
+
+    if (produktBeschreibung !== vorher.produktBeschreibung) {
+      daten.produktBeschreibung = produktBeschreibung;
+    }
+
+    if (produktMenge !== Number(vorher.produktMenge)) {
+        daten.produktMenge = produktMenge;
+    }
+
+    if (Object.keys(daten).length === 0) {
+        this.meldung = 'Keine Änderungen vorhanden.';
+        return;
+    }
 
     this.http.patch(
-      `/api/products/${produkt.produktId}`,
-      {
-      produktName: produkt.produktName,
-      // produktBeschreibung: produkt.produktBeschreibung,
-      produktMenge: Number(produkt.produktMenge)
-      },
-      { withCredentials: true }
+        `/api/products/${produkt.produktId}`,
+        daten,
+        { withCredentials: true }
     ).subscribe({
-      next: () => {
-        this.ausgewaehltesProdukt = null;
-        this.alleProdukteLaden();
-      },
-      error: fehler => {
-        this.meldung =
-          fehler.error?.error || 'Fehler beim Bearbeiten.';
-        this.cdr.detectChanges();
-      }
+        next: () => {
+            this.ausgewaehltesProdukt = null;
+            this.urspruenglichesProdukt = null;
+            this.alleProdukteLaden();
+        },
+        error: fehler => {
+            this.meldung =
+                fehler.error?.message ||
+                fehler.error?.error ||
+                'Fehler beim Bearbeiten.';
+            this.cdr.detectChanges();
+        }
     });
   }
 

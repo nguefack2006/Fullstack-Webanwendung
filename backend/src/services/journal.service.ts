@@ -10,6 +10,8 @@ export async function saveEvent(daten: {
     benutzerId?: number;
     benutzerNachname?: string;
     menge?: number;
+    alteMenge?: number;
+    neueMenge?: number;
 }) {
     return Journal.create(daten);
 }

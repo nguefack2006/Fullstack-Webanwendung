@@ -26,6 +26,10 @@ export const routes: Routes = [
     component: warenausgang
   },
   {
+    path: 'produkt-anlegen',
+    component: ProduktAnlegen
+  },
+  {
     path: 'produkte',
     component: ShowAllProdukt
   },
