@@ -1,9 +1,13 @@
 @if (benutzer(); as konto) {
     <h1>Willkommen, {{ konto.benutzerVorname }}!</h1>
 
-    <button type="button" (click)="abmelden()" [disabled]="laedt()">
-        {{ laedt() ? 'Abmeldung läuft …' : 'Abmelden' }}
-    </button>
+    @if (konto.benutzerRolle === 'LAGERVERWALTER') {
+        <app-produkt-anlegen></app-produkt-anlegen>
+    }
+
+    <app-abmelden
+        (abgemeldet)="benutzer.set(null); formular.reset()"
+    ></app-abmelden>
 } @else {
     <h1>Anmelden</h1>
 

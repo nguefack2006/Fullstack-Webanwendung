@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
 
-import { AnmeldenComponent } from './anmelden/anmelden.component';
-import { wareneingang } from './wareneingang/wareneingang';
+import { AnmeldenComponent } from './anmelden/anmelden';
+import {wareneingang } from './wareneingang/wareneingang';
 import { warenausgang } from './warenausgang/warenausgang';
 import { ShowAllProdukt } from './show-all-produkt/show-all-produkt';
+
 
 export const routes: Routes = [
   {

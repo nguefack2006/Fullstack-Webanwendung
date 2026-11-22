@@ -1,0 +1,7 @@
+<button type="button" (click)="abmelden()" [disabled]="laedt()">
+    {{ laedt() ? 'Abmeldung läuft …' : 'Abmelden' }}
+</button>
+
+@if (fehler()) {
+    <p role="alert">{{ fehler() }}</p>
+}
