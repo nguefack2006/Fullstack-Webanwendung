@@ -78,37 +78,49 @@
         </p>
     </div>
 
-    <section *ngIf="ausgewaehltesProdukt" class="bearbeitungsformular">
+    @if (ausgewaehltesProdukt; as produkt) {
+    <section class="bearbeitungsformular">
         <h2>Produkt bearbeiten</h2>
 
-
-        <form *ngIf="ausgewaehltesProdukt" (ngSubmit)="aenderungenSpeichern()">
-
-            <h2>Produkt bearbeiten</h2>
-
+        <form (ngSubmit)="aenderungenSpeichern()">
             <label>Produktname</label>
-            <input type="text" name="produktName" [(ngModel)]="ausgewaehltesProdukt.produktName" required />
-            <label for="beschreibungBearbeiten">Produktbeschreibung</label>
+            <input
+                type="text"
+                name="produktName"
+                [(ngModel)]="produkt.produktName"
+                required
+            />
+
+            <label for="beschreibungBearbeiten">
+                Produktbeschreibung
+            </label>
 
             <textarea
                 id="beschreibungBearbeiten"
                 name="produktBeschreibung"
-                [(ngModel)]="ausgewaehltesProdukt.produktBeschreibung"
+                [(ngModel)]="produkt.produktBeschreibung"
                 maxlength="255"
                 required
             ></textarea>
 
             <label>Lagerbestand</label>
-            <input type="number" name="produktMenge" [(ngModel)]="ausgewaehltesProdukt.produktMenge" min="0" required />
+            <input
+                type="number"
+                name="produktMenge"
+                [(ngModel)]="produkt.produktMenge"
+                min="0"
+                required
+            />
 
-            <button type="submit">Änderungen speichern</button>
+            <button type="submit">
+                Änderungen speichern
+            </button>
 
             <button type="button" (click)="bearbeitenAbbrechen()">
                 Abbrechen
             </button>
-
         </form>
-
     </section>
+}
 
 </main>

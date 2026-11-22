@@ -190,19 +190,38 @@ export async function handleUpdateProdukt(
         daten.produktMenge = produktMenge
     }
 
-    const [anzahl] = await updateProdukt(produktId, daten);
+    const ergebnis = await updateProdukt(produktId, daten);
 
-    if (anzahl === 0) {
+    if (!ergebnis) {
         res.status(404).json({ message: 'Produkt nicht gefunden.' });
         return;
     }
 
-    res.status(200).json({ message: 'Produkt erfolgreich aktualisiert.' });
-    eventBus.emit("Produktupdate", {
-        eventTyp: "PRODUKT_UPDATE",
+    const journalDaten: {
+        eventTyp: string;
+        produktId: number;
+        alteMenge?: number;
+        neueMenge?: number;
+    } = {
+        eventTyp: 'PRODUKT_UPDATE',
         produktId
+    };
+
+    if (
+        daten.produktMenge !== undefined &&
+        ergebnis.alteMenge !== ergebnis.neueMenge
+    ) {
+        journalDaten.alteMenge = ergebnis.alteMenge;
+        journalDaten.neueMenge = ergebnis.neueMenge;
+    }
+
+    eventBus.emit('Produktupdate', journalDaten);
+
+    res.status(200).json({
+        message: 'Produkt erfolgreich aktualisiert.'
     });
 }
+
 
 export async function handleDeleteProdukt(
     req: Request,
