@@ -32,10 +32,6 @@ export const routes: Routes = [
   {
     path: 'produkte',
     component: ShowAllProdukt
-  },
-  {
-    path: 'produkt-anlegen',
-    component:ProduktAnlegen
   }
 
 ];

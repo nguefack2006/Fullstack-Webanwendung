@@ -77,15 +77,29 @@ export function updateProdukt(
     daten: {
         produktName?: string;
         produktBeschreibung?: string;
-        produktMenge?:number;
+        produktMenge?: number;
     }
 ) {
-    return Produkt.update(daten, {
-        where: { produktId },
-        fields: ['produktName', 'produktBeschreibung','produktMenge']
+    return sequelize.transaction(async (transaction) => {
+        const produkt = await Produkt.findByPk(produktId, {
+            transaction,
+            lock: transaction.LOCK.UPDATE
+        });
+
+        if (!produkt) {
+            return null;
+        }
+
+        const alteMenge = Number(produkt.get('produktMenge'));
+
+        await produkt.update(daten, { transaction });
+        await produkt.reload({ transaction });
+
+        const neueMenge = Number(produkt.get('produktMenge'));
+
+        return { alteMenge, neueMenge };
     });
 }
-
 export function deleteProdukt(produktId: number) {
     return Produkt.destroy({
         where: { produktId }
