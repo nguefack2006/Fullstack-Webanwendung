@@ -8,6 +8,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 interface Produkt {
   produktId: number;
@@ -32,6 +33,7 @@ export class ShowAllProdukt implements OnInit {
 
   private http = inject(HttpClient);
   private cdr = inject(ChangeDetectorRef);
+  private router = inject(Router);
 
   ngOnInit() {
     this.alleProdukteLaden();
@@ -107,7 +109,7 @@ export class ShowAllProdukt implements OnInit {
   }
 
   produktAnlegen() {
-    this.meldung = 'Produkt anlegen ist noch nicht eingerichtet.';
+     this.router.navigate(['/produkt-anlegen']);
   }
 
   produktBearbeiten(produkt: Produkt) {

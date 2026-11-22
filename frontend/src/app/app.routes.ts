@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
 
 import { AnmeldenComponent } from './anmelden/anmelden';
-import {wareneingang } from './wareneingang/wareneingang';
+import { wareneingang } from './wareneingang/wareneingang';
 import { warenausgang } from './warenausgang/warenausgang';
 import { ShowAllProdukt } from './show-all-produkt/show-all-produkt';
+import { ProduktAnlegen } from './produkt-anlegen/produkt-anlegen';
 
 
 export const routes: Routes = [
@@ -27,6 +28,10 @@ export const routes: Routes = [
   {
     path: 'produkte',
     component: ShowAllProdukt
+  },
+  {
+    path: 'produkt-anlegen',
+    component:ProduktAnlegen
   }
 
 ];
