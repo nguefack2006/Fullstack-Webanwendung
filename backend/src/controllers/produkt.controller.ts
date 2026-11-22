@@ -4,6 +4,7 @@ import type { Request, Response } from 'express';
 import { UniqueConstraintError } from 'sequelize';
 import { createProdukt, updateProdukt, deleteProdukt } from '../models/produkt.model';
 import { eventBus } from "../events/event.bus";
+import { getBenutzerById } from "../models/benutzer.model";
 
 export async function getAllProdukte(req: Request, res: Response) {
     try {
@@ -77,7 +78,7 @@ export async function handleCreateProdukt(req: Request, res: Response): Promise<
         return;
     }
 
-    const {  produktName, produktBeschreibung } = req.body ?? {};
+    const { produktName, produktBeschreibung } = req.body ?? {};
 
     if (
         typeof produktName !== 'string' || !produktName.trim() ||
@@ -137,7 +138,7 @@ export async function handleUpdateProdukt(
         return;
     }
 
-    const { produktName, produktBeschreibung, produktMenge} = req.body ?? {};
+    const { produktName, produktBeschreibung, produktMenge } = req.body ?? {};
 
     if (produktName === undefined && produktBeschreibung === undefined && produktMenge === undefined) {
         res.status(400).json({
@@ -162,19 +163,19 @@ export async function handleUpdateProdukt(
         res.status(400).json({ message: 'Ungültige Beschreibung.' });
         return;
     }
-    if(produktMenge !== undefined && 
-        (typeof produktMenge !== 'number'|| 
-            produktMenge <0)
-        
-    ){ 
-        res.status(400).json({message: 'Ungültige Menge.'});
+    if (produktMenge !== undefined &&
+        (typeof produktMenge !== 'number' ||
+            produktMenge < 0)
+
+    ) {
+        res.status(400).json({ message: 'Ungültige Menge.' });
         return
     }
 
     const daten: {
         produktName?: string;
         produktBeschreibung?: string;
-        produktMenge?:number;
+        produktMenge?: number;
     } = {};
 
     if (produktName !== undefined) {
@@ -185,7 +186,7 @@ export async function handleUpdateProdukt(
         daten.produktBeschreibung = produktBeschreibung.trim();
     }
 
-    if (produktMenge !==undefined){
+    if (produktMenge !== undefined) {
         daten.produktMenge = produktMenge
     }
 
@@ -197,6 +198,10 @@ export async function handleUpdateProdukt(
     }
 
     res.status(200).json({ message: 'Produkt erfolgreich aktualisiert.' });
+    eventBus.emit("Produktupdate", {
+        eventTyp: "PRODUKT_UPDATE",
+        produktId
+    });
 }
 
 export async function handleDeleteProdukt(
@@ -233,9 +238,9 @@ export async function handleDeleteProdukt(
         return;
     }
     eventBus.emit("Produktdelete", {
-            eventTyp: "PRODUKT_DELETE",
-            produktId,
-        });
+        eventTyp: "PRODUKT_DELETE",
+        produktId,
+    });
 
     res.status(204).send();
 }
