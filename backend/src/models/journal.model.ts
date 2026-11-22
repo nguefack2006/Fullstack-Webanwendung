@@ -6,6 +6,8 @@ const journalSchema = new mongoose.Schema({
     benutzerId: Number,
     benutzerNachname: String,
     menge: Number,
+    alteMenge: Number,
+    neueMenge: Number,
     zeitpunkt: {
         type: Date,
         default: Date.now

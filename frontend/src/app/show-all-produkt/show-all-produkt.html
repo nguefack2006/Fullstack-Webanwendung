@@ -87,9 +87,15 @@
 
             <label>Produktname</label>
             <input type="text" name="produktName" [(ngModel)]="ausgewaehltesProdukt.produktName" required />
-<!-- 
-            <label>Produktbeschreibung</label>
-            <textarea name="produktBeschreibung" [(ngModel)]="ausgewaehltesProdukt.produktBeschreibung"></textarea> -->
+            <label for="beschreibungBearbeiten">Produktbeschreibung</label>
+
+            <textarea
+                id="beschreibungBearbeiten"
+                name="produktBeschreibung"
+                [(ngModel)]="ausgewaehltesProdukt.produktBeschreibung"
+                maxlength="255"
+                required
+            ></textarea>
 
             <label>Lagerbestand</label>
             <input type="number" name="produktMenge" [(ngModel)]="ausgewaehltesProdukt.produktMenge" min="0" required />
