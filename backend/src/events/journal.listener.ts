@@ -61,4 +61,15 @@ eventBus.on("Produktdelete",async (daten) => {
     } catch(error) {
         console.error(error);
     }
+    
+});
+
+eventBus.on("Produktupdate",async (daten) => {
+    try{
+        await saveEvent(daten);
+        console.log("Produkt bearbeitet");
+    } catch(error) {
+        console.error(error);
+    }
+    
 });

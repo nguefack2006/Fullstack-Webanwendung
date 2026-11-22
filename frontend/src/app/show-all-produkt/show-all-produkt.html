@@ -1,0 +1,107 @@
+<main id="show" class="produkt">
+
+    <div class="Erst">
+        <div>
+            <h1>Produkte</h1>
+            <p>Alle Produkte in Ihrem Lager</p>
+        </div>
+
+        <button type="button" class="produktAnlegen" (click)="produktAnlegen()">
+            <span>+</span>
+            <span>Neues Produkt</span>
+        </button>
+    </div>
+
+    <div class="suchbereich">
+        <input type="text" placeholder="Produktname oder Produkt-ID suchen..." [(ngModel)]="suchbegriff"
+            (keyup.enter)="produktSuchen()" />
+
+        <button type="button" (click)="produktSuchen()">
+            Suchen
+        </button>
+
+        <button type="button" (click)="alleProdukteLaden()">
+            Alle Produkte
+        </button>
+    </div>
+
+    <p *ngIf="meldung">{{ meldung }}</p>
+
+    <div class="produktListe">
+        <h2>Produktliste</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Produkt-ID</th>
+                    <th>Produktname</th>
+                    <th>Lagerbestand</th>
+                    <th>Status</th>
+                    <th>Aktionen</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let produkt of produkte">
+                    <td>{{ produkt.produktId }}</td>
+                    <td>{{ produkt.produktName }}</td>
+                    <td>{{ produkt.produktMenge}}</td>
+
+                    <td>
+                        <span class="status" [ngClass]="{
+  'verfuegbar': +produkt.produktMenge > 10,
+  'niedrig': +produkt.produktMenge > 0 && +produkt.produktMenge <= 10,
+  'nicht-verfuegbar': +produkt.produktMenge <= 0
+}">
+                            {{ getStatus(produkt.produktMenge) }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <div class="aktionen">
+                            <button type="button" class="bearbeiten" (click)="produktBearbeiten(produkt)">
+                                Bearbeiten
+                            </button>
+
+                            <button type="button" class="loeschen" (click)="produktLoeschen(produkt)">
+                                Löschen
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p *ngIf="produkte.length === 0 && !meldung">
+            Keine Produkte vorhanden.
+        </p>
+    </div>
+
+    <section *ngIf="ausgewaehltesProdukt" class="bearbeitungsformular">
+        <h2>Produkt bearbeiten</h2>
+
+
+        <form *ngIf="ausgewaehltesProdukt" (ngSubmit)="aenderungenSpeichern()">
+
+            <h2>Produkt bearbeiten</h2>
+
+            <label>Produktname</label>
+            <input type="text" name="produktName" [(ngModel)]="ausgewaehltesProdukt.produktName" required />
+<!-- 
+            <label>Produktbeschreibung</label>
+            <textarea name="produktBeschreibung" [(ngModel)]="ausgewaehltesProdukt.produktBeschreibung"></textarea> -->
+
+            <label>Lagerbestand</label>
+            <input type="number" name="produktMenge" [(ngModel)]="ausgewaehltesProdukt.produktMenge" min="0" required />
+
+            <button type="submit">Änderungen speichern</button>
+
+            <button type="button" (click)="bearbeitenAbbrechen()">
+                Abbrechen
+            </button>
+
+        </form>
+
+    </section>
+
+</main>

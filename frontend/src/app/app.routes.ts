@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { AnmeldenComponent } from './anmelden/anmelden.component';
 import { wareneingang } from './wareneingang/wareneingang';
 import { warenausgang } from './warenausgang/warenausgang';
+import { ShowAllProdukt } from './show-all-produkt/show-all-produkt';
 
 export const routes: Routes = [
   {
@@ -21,5 +22,10 @@ export const routes: Routes = [
   {
     path: 'warenausgang',
     component: warenausgang
+  },
+  {
+    path: 'produkte',
+    component: ShowAllProdukt
   }
+
 ];
