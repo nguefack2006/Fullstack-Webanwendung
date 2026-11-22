@@ -3,11 +3,13 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { AuthService, type Benutzer } from '../services/auth.service';
+import { Abmelden } from '../abmelden/abmelden';
+import { ProduktAnlegen } from '../produkt-anlegen/produkt-anlegen';
 
 @Component({
     selector: 'app-anmelden',
-    imports: [ReactiveFormsModule],
-    templateUrl: './anmelden.component.html'
+    imports: [ReactiveFormsModule, Abmelden, ProduktAnlegen],
+    templateUrl: './anmelden.html'
 })
 export class AnmeldenComponent {
     private readonly authService = inject(AuthService);
@@ -49,24 +51,4 @@ export class AnmeldenComponent {
             });
     }
 
-    abmelden(): void {
-        if (!this.benutzer() || this.laedt()) {
-            return;
-        }
-
-        this.laedt.set(true);
-        this.fehler.set('');
-
-        this.authService.logout()
-            .pipe(finalize(() => this.laedt.set(false)))
-            .subscribe({
-                next: () => {
-                    this.benutzer.set(null);
-                    this.formular.reset();
-                },
-                error: () => {
-                    this.fehler.set('Abmeldung fehlgeschlagen. Bitte erneut versuchen.');
-                }
-            });
-    }
 }

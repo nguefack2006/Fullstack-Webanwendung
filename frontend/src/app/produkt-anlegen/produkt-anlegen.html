@@ -1,0 +1,39 @@
+<h2>Produkt anlegen</h2>
+
+<form [formGroup]="formular" (ngSubmit)="speichern()">
+    <div>
+        <label for="produktName">Produktname</label>
+
+        <input
+            id="produktName"
+            type="text"
+            formControlName="produktName"
+            maxlength="255"
+            required
+        >
+    </div>
+
+    <div>
+        <label for="produktBeschreibung">Beschreibung</label>
+
+        <textarea
+            id="produktBeschreibung"
+            formControlName="produktBeschreibung"
+            rows="4"
+            maxlength="255"
+            required
+        ></textarea>
+    </div>
+
+    <button type="submit" [disabled]="formular.invalid || laedt()">
+        {{ laedt() ? 'Wird gespeichert …' : 'Produkt anlegen' }}
+    </button>
+</form>
+
+@if (fehler()) {
+    <p role="alert">{{ fehler() }}</p>
+}
+
+@if (erfolg()) {
+    <p role="status">{{ erfolg() }}</p>
+}
